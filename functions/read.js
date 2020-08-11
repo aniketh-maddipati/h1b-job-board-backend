@@ -12,9 +12,13 @@ admin.initializeApp({
 const db = admin.firestore();
 
 router.get('/:key/:value', async (req, res) => {
-    console.log(req.params.key, req.params.value)
+    var key = req.params.key;
+    var value = req.params.value;
+    if (isNumericalKey(key)){
+        value = parseInt(value);
+    }
     const employersRef = await db.collection('employers');
-    const snapshot = await employersRef.where(req.params.key, '==', req.params.value).get();
+    const snapshot = await employersRef.where(key, '==', value).get();
 if (snapshot.empty) {
   res.status(400).send('No matching documents')
 } else {
@@ -23,9 +27,16 @@ if (snapshot.empty) {
         response.push(doc.data());
       });
       res.status(200).send(response)
-}
-    
-})
+} 
+});
 
+const isNumericalKey = (key) => {
+    if (key == ('state' || 'employers' || 'city')) {
+        return false
+    } else {
+        return true
+        
+    }
+}
 
 module.exports = router;
