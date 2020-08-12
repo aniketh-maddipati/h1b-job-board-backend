@@ -7,17 +7,12 @@ const healthRoutes = require('./health');
 const readRoutes = require('./read');
 
 app.use(bodyParser.json({ type: 'application/*+json' }))
-app.use(cors({ origin: true }))
+app.use(cors({ origin: true }));
+
+/* USE THE ROUTES LOCATED IN THESE FILES */
 app.use('/', readRoutes, healthRoutes)
 
-// not as clean, but a better endpoint to consume
-// const api = functions.https.onRequest((request, response) => {
-//   if (!request.path) {
-//     request.url = `/${request.url}` // prepend '/' to keep query params if any
-//   }
-//   return app(request, response)
-// });
-
+/* use the firebase functions built in https request listener to send http request data to our express app*/
 const api = functions.https.onRequest(app);
 
 module.exports = {
