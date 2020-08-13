@@ -5,23 +5,16 @@ const cors = require('cors');
 const bodyParser = require('body-parser')
 const healthRoutes = require('./health');
 const readRoutes = require('./read');
-const port = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(bodyParser.json({ type: 'application/*+json' }))
+app.use(cors({ origin: true }));
 
+/* USE THE ROUTES LOCATED IN THESE FILES */
+app.use('/', readRoutes, healthRoutes)
 
-
-app.use('/', healthRoutes, readRoutes);
-
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-  });
-
-
-const api = functions.https.onRequest(app)
+/* use the firebase functions built in https request listener to send http request data to our express app*/
+const api = functions.https.onRequest(app);
 
 module.exports = {
-    api
+  api
 };
-

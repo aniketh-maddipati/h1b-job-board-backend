@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 var admin = require("firebase-admin");
-
 var serviceAccount = require("./h1-board-firebase-adminsdk-flfrk-92389457cd.json");
 
 admin.initializeApp({
@@ -9,11 +8,14 @@ admin.initializeApp({
   databaseURL: "https://h1-board.firebaseio.com"
 });
 
+// initialize db
 const db = admin.firestore();
+
 
 router.get('/:key/:value', async (req, res) => {
     var key = req.params.key;
     var value = req.params.value;
+    //check
     if (isNumericalKey(key)){
         value = parseInt(value);
     }
